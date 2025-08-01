@@ -1,9 +1,9 @@
 streamlit
+opencv-python-headless
 pytesseract
 pdf2image
-opencv-python-headless  # Use headless version for cloud
-pymupdf
 pandas
-fpdf
-pillow
+Pillow
+PyMuPDF
 openpyxl
+fpdf
