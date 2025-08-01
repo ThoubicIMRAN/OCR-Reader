@@ -126,7 +126,6 @@ def export_dataframe(df, filename_base):
 
 # --- Streamlit UI ---
 st.set_page_config(page_title="OCR with Confidence Scores", layout="wide")
-
 st.markdown("""
     <style>
         .main { background-color: #F9FAFC; }
@@ -135,27 +134,27 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("\ud83d\udd0d OCR Extractor with Confidence Scoring")
+st.title("OCR Extractor with Confidence Scoring")
 st.markdown("Upload scanned documents or images to extract, review, and export OCR results.")
 
 # Options
-show_conf = st.toggle("\ud83e\uddea Highlight Low Confidence Words", value=True)
+show_conf = st.toggle("Highlight Low Confidence Words", value=True)
 conf_threshold = st.slider("Confidence Threshold", 0, 100, 60) if show_conf else 60
 
 uploaded_files = st.file_uploader(
-    "\ud83d\udcc1 Upload files (PDF, JPG, PNG, etc.)",
+    "Upload files (PDF, JPG, PNG, etc.)",
     type=["pdf", "jpg", "jpeg", "png", "bmp", "tiff"],
     accept_multiple_files=True
 )
 
 if uploaded_files:
-    with st.spinner("\ud83d\udd04 Processing..."):
+    with st.spinner("Processing..."):
         results = process_files(uploaded_files)
 
     if results:
-        st.success(f"\u2705 {len(results)} file(s) processed.")
+        st.success(f"{len(results)} file(s) processed.")
         for filename, df in results:
-            with st.expander(f"\ud83d\udcc4 Results for: `{filename}`", expanded=False):
+            with st.expander(f"Results for: `{filename}`", expanded=False):
                 if show_conf:
                     def color_conf(val):
                         return f"color: red;" if val < conf_threshold else ""
@@ -165,17 +164,17 @@ if uploaded_files:
                     st.dataframe(df[['text']], use_container_width=True)
 
                 editable_text = "\n".join(df["text"].tolist())
-                edited = st.text_area("\u270f\ufe0f Edit Extracted Text", value=editable_text, height=200)
+                edited = st.text_area("Edit Extracted Text", value=editable_text, height=200)
                 edited_df = pd.DataFrame({"text": [line for line in edited.split('\n') if line.strip()]})
 
                 csv, excel, pdf = export_dataframe(edited_df, os.path.splitext(filename)[0])
                 col1, col2, col3 = st.columns(3)
-                col1.download_button("\u2b07\ufe0f Download CSV", csv, f"{filename}.csv", "text/csv")
-                col2.download_button("\u2b07\ufe0f Download Excel", excel, f"{filename}.xlsx",
+                col1.download_button("Download CSV", csv, f"{filename}.csv", "text/csv")
+                col2.download_button("Download Excel", excel, f"{filename}.xlsx",
                                      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                col3.download_button("\u2b07\ufe0f Download PDF", pdf, f"{filename}_ocr.pdf", "application/pdf")
+                col3.download_button("Download PDF", pdf, f"{filename}_ocr.pdf", "application/pdf")
     else:
-        st.warning("\u26a0\ufe0f No extractable text found.")
+        st.warning("No extractable text found.")
 
-    with st.expander("\ud83e\ude75 Debug Logs"):
+    with st.expander("Debug Logs"):
         st.code(log_stream.getvalue(), language="log")
