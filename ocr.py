@@ -125,7 +125,8 @@ def export_dataframe(df, filename_base):
 
 
 # --- Streamlit UI ---
-st.set_page_config(page_title="\ud83d\udd0d OCR with Confidence Scores", layout="wide")
+st.set_page_config(page_title="OCR with Confidence Scores", layout="wide")
+
 st.markdown("""
     <style>
         .main { background-color: #F9FAFC; }
