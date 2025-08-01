@@ -117,7 +117,8 @@ def export_dataframe(df, filename_base):
     pdf.add_page()
     pdf.set_font("Arial", size=10)
     for _, row in df_export.iterrows():
-        pdf.multi_cell(0, 10, str(row['text']))
+        safe_text = str(row['text']).encode('latin-1', errors='replace').decode('latin-1')
+        pdf.multi_cell(0, 10, safe_text)
     pdf_buffer = BytesIO()
     pdf.output(pdf_buffer)
 
